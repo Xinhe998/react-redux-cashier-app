@@ -19,30 +19,16 @@ import milkTea from './milk-tea.jpg'
 import blackTea from './black-tea.jpg'
 import Order from '../Order/Order'
 
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as action from '../../action'
 
 
-
-
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      foods: [
-        { name: "Spaghetti", image: spaghetti, price: 130, isSelected: false },
-        { name: "Pizza", image: pizza, price: 250, isSelected: false },
-        { name: "French-Frices", image: frenchFries, price: 80, isSelected: false },
-      ],
-      drinks: [
-        { name: "Cola", image: cola, price: 40, isSelected: false },
-        { name: "Coffee", image: coffee, price: 100, isSelected: false },
-        { name: "Milk Tea", image: milkTea, price: 90, isSelected: false },
-        { name: "Black Tea", image: blackTea, price: 30, isSelected: false }
-      ],
-      selectedItems: []
-    }
+
     this.props.addFoods(
       [
         { name: "Spaghetti", image: spaghetti, price: 130, isSelected: false },
@@ -62,71 +48,44 @@ class App extends Component {
   }
 
   handleFoodItemSelect = (type, key) => {
-    const { foods, drinks } = this.state;
+    const { foods, drinks } = this.props;
     const id = key;
     if (type === 'foods') {
-      foods[id].isSelected = !foods[id].isSelected;
-      this.props.updateFood(foods)
-      this.setState({
-        foods: foods
-      }, function () {
-        if (foods[id].isSelected) {
-          this.setState({
-            selectedItems: [...this.state.selectedItems, foods[id]]
-          }, function () {
-            this.props.onItemSelected(
-              {
-                name: foods[id].name,
-                price: foods[id].price,
-                quantity: 1
-              })
-          })
+      let food = foods;
+      food[id].isSelected = !foods[id].isSelected;
+      this.props.updateFood(food)
+      if (foods[id].isSelected) {
 
+        this.props.onItemSelected(
+          {
+            name: foods[id].name,
+            price: foods[id].price,
+            quantity: 1
+          })
+      } else {
+        this.props.onItemUnselected({
+          name: foods[id].name
+        })
+      }
 
+    } else  {
+      let drink = drinks;
+      drink[id].isSelected = !drinks[id].isSelected;
+      this.props.updateDrink(drink)
 
-        } else {
-          let tempArr = [...this.state.selectedItems]
-          var index = tempArr.indexOf(foods[id])
-          if (index !== -1) tempArr.splice(index, 1)
-          this.setState({
-            selectedItems: tempArr
-          }, function () {
-            this.props.onItemUnselected({
-              name: foods[id].name
-            })
+      if (drinks[id].isSelected) {
+        this.props.onItemSelected(
+          {
+            name: drinks[id].name,
+            price: drinks[id].price,
+            quantity: 1
           })
-        }
-      })
-    } else {
-      drinks[id].isSelected = !drinks[id].isSelected;
-      this.props.updateDrink(foods)
-      this.setState({
-        drinks: drinks
-      }, function () {
-        if (drinks[id].isSelected) {
-          this.setState({
-            selectedItems: [...this.state.selectedItems, drinks[id]]
-          }, function () {
-            this.props.onItemSelected(
-              {
-                name: drinks[id].name,
-                price: drinks[id].price,
-                quantity: 1
-              })
-          })
-        } else {
-          let tempArr = [...this.state.selectedItems]
-          var index = tempArr.indexOf(drinks[id])
-          if (index !== -1) tempArr.splice(index, 1)
-          this.setState({
-            selectedItems: tempArr
-          }, function () {
-            this.props.onItemUnselected({
-              name: drinks[id].name
-            })
-          })
-        }
-      })
+      } else {
+        this.props.onItemUnselected({
+          name: drinks[id].name
+        })
+      }
+
     }
   }
 
@@ -159,8 +118,8 @@ class App extends Component {
               <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('foods', key)} key={key} />
             )} />
             <Route path="/drinks" render={() => drinks.map((item, key) =>
-              <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('drinks', key)} key={key} />
-            )} />
+                <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('drinks', key)} key={key} />
+              )} />
           </div>
           <Order />
         </div>
@@ -177,4 +136,4 @@ const mapStateToProps = store => (
   }
 )
 
-export default connect(mapStateToProps, action)(App)
+export default withRouter(connect(mapStateToProps, action)(App))

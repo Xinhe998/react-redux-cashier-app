@@ -4,42 +4,36 @@ import './OrderList.scss';
 import deleteIcon from './garbage.png';
 
 import NumberSpinner from '../NumberSpinner/NumberSpinner'
-
+import { withRouter } from 'react-router-dom'
 import * as action from '../../action'
 import { connect } from 'react-redux'
 
 class OrderList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            number: 1
-        }
     }
     handleUpClick = () => {
-        this.setState({
-            number: ++this.state.number
-        },function() {
+        var number = this.props.number
+        this.props.updateSelectedItemQuantity(
+            {
+                name: this.props.name,
+                quantity: ++number
+            }
+        )
+    }
+
+    handleDownClick = () => {
+        var number = this.props.number
+
+        if (number > 1) {
+
             this.props.updateSelectedItemQuantity(
                 {
                     name: this.props.name,
-                    quantity: this.state.number
+                    quantity: --number
                 }
             )
-        })
-       
-    }
-    handleDownClick = () => {
-        if (this.state.number > 1) {
-            this.setState({
-                number: --this.state.number
-            },function() {
-                this.props.updateSelectedItemQuantity(
-                    {
-                        name: this.props.name,
-                        quantity: this.state.number
-                    }
-                )
-            })
+
         }
     }
     render() {
@@ -53,8 +47,8 @@ class OrderList extends React.Component {
                     <p className="unit_price">{this.props.unitPrice}</p>
                 </div>
                 <div className="column-2">
-                    <NumberSpinner number={this.state.number} handleUpClick={this.handleUpClick} handleDownClick={this.handleDownClick} />
-                    <span className="subtotal">{this.state.number * this.props.unitPrice}</span>
+                    <NumberSpinner number={this.props.number} handleUpClick={this.handleUpClick} handleDownClick={this.handleDownClick} />
+                    <div className="subtotal">{this.props.number * this.props.unitPrice}</div>
                 </div>
             </div>
         )
@@ -68,8 +62,10 @@ OrderList.propTypes = {
 }
 const mapStateToProps = store => (
     {
-      selectedItem: store.selectedItem
+      selectedItem: store.selectedItem,
+      foods: store.foods,
+      drinks: store.drinks
     }
-)
+  )
 
-export default connect(mapStateToProps, action)(OrderList);
+export default withRouter(connect(mapStateToProps, action)(OrderList))

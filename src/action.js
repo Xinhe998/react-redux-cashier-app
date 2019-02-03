@@ -10,6 +10,7 @@ export const updateSelectedItemQuantity = (payload) => (
     { type: 'UPDATE_QUANTITY', payload }
 )
 
+
 export const updateFood = (payload) => (
     { type: 'UPDATE_FOOD', payload }
 )

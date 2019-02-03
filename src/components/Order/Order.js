@@ -3,7 +3,7 @@ import './Order.scss';
 
 import OrderList from '../OrderList/OrderList'
 import { connect } from 'react-redux'
-
+import { withRouter } from 'react-router-dom'
 import * as action from '../../action'
 
 
@@ -26,6 +26,7 @@ class Order extends React.Component {
     }
     render() {
         var { selectedItem } = this.props;
+        
         var subtotal = 0;
         selectedItem.map((item) => {
             subtotal += item.price * item.quantity;
@@ -35,9 +36,9 @@ class Order extends React.Component {
                 <div className="title">
                     <p>New Order</p>
                 </div>
-                {selectedItem.map((item, key) => {
+                {selectedItem && selectedItem.map((item, key) => {
                     return (
-                        <OrderList name={item.name} unitPrice={item.price} handleDelete={()=>this.handleDelete(item)} key={key} />
+                        <OrderList name={item.name} unitPrice={item.price} number={item.quantity} handleDelete={()=>this.handleDelete(item)} key={key} />
                     )
                 })}
                 <div className="checkoutBox">
@@ -65,7 +66,11 @@ class Order extends React.Component {
     }
 }
 const mapStateToProps = store => (
-    { selectedItem: store.selectedItem }
-)
+    {
+      selectedItem: store.selectedItem,
+      foods: store.foods,
+      drinks: store.drinks
+    }
+  )
 
-  export default connect(mapStateToProps, action)(Order)
+  export default withRouter(connect(mapStateToProps, action)(Order))

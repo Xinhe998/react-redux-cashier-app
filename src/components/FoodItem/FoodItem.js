@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import tick from './tick.png'
 import { connect } from 'react-redux'
 import * as action from '../../action'
+import { withRouter } from 'react-router-dom'
 
 class FoodItem extends React.Component {
     constructor(props) {
@@ -41,7 +42,10 @@ FoodItem.propTypes = {
 }
 
 const mapStateToProps = store => (
-    { selectedItem: store.selectedItem }
-)
-
-export default connect(mapStateToProps, action)(FoodItem);
+    {
+      selectedItem: store.selectedItem,
+      foods: store.foods,
+      drinks: store.drinks
+    }
+  )
+export default withRouter(connect(mapStateToProps, action)(FoodItem))

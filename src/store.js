@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 
 function dealSelectedItem(state = [], action) {
+    
     switch (action.type) {
         case 'ADD_SELECTED_ITEM':
             {
@@ -14,11 +15,7 @@ function dealSelectedItem(state = [], action) {
             {
                 state.map((item) => {
                     if(action.payload.name == item.name)
-                    {
-                        item.quantity = action.payload.quantity
-                    }
-                    
-                    return [item, ...state.filter(selectedItem => selectedItem.name !== action.payload.name)]
+                    return Object.assign(state.filter(selectedItem => selectedItem.name !== action.payload.name), item.quantity = action.payload.quantity)
                 })
             }
         default:
@@ -38,7 +35,7 @@ function dealFoods(state = [], action) {
             }
         case 'UPDATE_SELECTED_FOOD':
             {
-                state.map((item, key) => {
+                state.map((item) => {
                     if(action.payload.name == item.name)
                     item.isSelected = action.payload.isSelected
 
