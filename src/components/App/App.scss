@@ -1,0 +1,45 @@
+body{
+  background: #f4f5f8;
+  .Nav {
+    position: fixed;
+    width: 100px;
+    height: 100vh;
+    text-align: center;
+    background: white;
+    a {
+      color: #97989b;
+      text-decoration: none;
+      
+
+      width: 80px;
+      height: 80px;
+      display: block;
+      border-radius: 15%;
+      margin: 20px auto;
+      padding: 3px;
+      &.active {
+      color: white; 
+      background: #FF5F6D;  /* fallback for old browsers */
+      background: -webkit-linear-gradient(to top, #FFC371, #FF5F6D);  /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to top, #FFC371, #FF5F6D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
+      img {
+        width: 40px;
+        height: 40px;
+        padding: 5px;
+      }
+      span {
+        display: block;
+      }
+    }
+  }
+}
+.right-wrapper {
+  width: calc(100vw - 100px);
+  float: right;
+  .items_wrapper {
+    display: inline-block;
+    margin: 20px;
+    width: 60%;
+  }
+}
