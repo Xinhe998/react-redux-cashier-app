@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import './Topbar.scss';
 import searchIcon from './search.png';
 
@@ -7,8 +8,7 @@ class Topbar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: '',
-            search: ''
+            title: ''
         }
     }
     //React 16.3 新的Hook，取代componentWillReceiveProps
@@ -27,11 +27,7 @@ class Topbar extends React.Component {
         }
         return null
     }
-    handleChange = (e) => {
-        if (e.target instanceof HTMLInputElement) {
-            this.setState({ search: e.target.value })
-        }
-    }
+    
     render() {
         return (
             <div className="topbar">
@@ -39,13 +35,17 @@ class Topbar extends React.Component {
                 <div className="searchBox">
                     <img src={searchIcon} />
                     <input type="text" className="searchInput"
-                        value={this.state.search}
+                        value={this.props.search}
                         placeholder={'Search for items'}
-                        onChange={this.handleChange}
+                        onChange={this.props.handleSearch}
                     />
                 </div>
             </div>
         )
     }
+}
+Topbar.propTypes = {
+    search: PropTypes.string,
+    handleSearch: PropTypes.func
 }
 export default Topbar;

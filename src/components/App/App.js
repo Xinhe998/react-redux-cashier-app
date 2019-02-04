@@ -28,7 +28,9 @@ import * as action from '../../action'
 class App extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      search: ''
+    }
     this.props.addFoods(
       [
         { name: "Spaghetti", image: spaghetti, price: 130, isSelected: false },
@@ -60,7 +62,8 @@ class App extends Component {
           {
             name: foods[id].name,
             price: foods[id].price,
-            quantity: 1
+            quantity: 1,
+            type: 'food'
           })
       } else {
         this.props.onItemUnselected({
@@ -68,7 +71,7 @@ class App extends Component {
         })
       }
 
-    } else  {
+    } else {
       let drink = drinks;
       drink[id].isSelected = !drinks[id].isSelected;
       this.props.updateDrink(drink)
@@ -78,7 +81,8 @@ class App extends Component {
           {
             name: drinks[id].name,
             price: drinks[id].price,
-            quantity: 1
+            quantity: 1,
+            type: 'drink'
           })
       } else {
         this.props.onItemUnselected({
@@ -88,7 +92,15 @@ class App extends Component {
 
     }
   }
-
+  handleSearch = (e) => {
+    if (e.target instanceof HTMLInputElement) {
+      this.setState({ search: e.target.value })
+    }
+  }
+  check = (str) => {
+    if (str.includes('ne'))
+      return str;
+  }
   render() {
     const { foods, drinks } = this.props;
     return (
@@ -112,14 +124,25 @@ class App extends Component {
           </NavLink>
         </div>
         <div className="right-wrapper">
-          <Topbar {...this.props} />
+          <Topbar {...this.props} search={this.state.search} handleSearch={this.handleSearch} />
           <div className="items_wrapper">
-            <Route path="/foods" render={() => foods.map((item, key) =>
-              <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('foods', key)} key={key} />
+            <Route path="/foods" render={() => foods.map((item, key) => {
+              if (item.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                return (
+                  <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('foods', key)} key={key} />
+                )
+              }
+            }
             )} />
-            <Route path="/drinks" render={() => drinks.map((item, key) =>
-                <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('drinks', key)} key={key} />
-              )} />
+            <Route path="/drinks" render={() => drinks.map((item, key) => {
+              if (item.name.toLowerCase().includes(this.state.search.toLowerCase())) {
+                return (
+                  <FoodItem item_name={item.name} item_image={item.image} price={item.price} isSelected={item.isSelected} handleClick={() => this.handleFoodItemSelect('drinks', key)} key={key} />
+                )
+              }
+            }
+
+            )} />
           </div>
           <Order />
         </div>

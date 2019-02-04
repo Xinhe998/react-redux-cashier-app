@@ -61,11 +61,11 @@ OrderList.propTypes = {
     number: PropTypes.number
 }
 const mapStateToProps = store => (
-    {
-      selectedItem: store.selectedItem,
-      foods: store.foods,
-      drinks: store.drinks
-    }
-  )
+  {
+    selectedItem: store.selectedItem,
+    foods: store.foods,
+    drinks: store.drinks
+  }
+)
 
-export default withRouter(connect(mapStateToProps, action)(OrderList))
+export default withRouter(connect(null, action)(OrderList))

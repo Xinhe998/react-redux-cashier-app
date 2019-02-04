@@ -13,10 +13,16 @@ function dealSelectedItem(state = [], action) {
             }
         case 'UPDATE_QUANTITY':
             {
-                state.map((item) => {
-                    if(action.payload.name == item.name)
-                    return Object.assign(state.filter(selectedItem => selectedItem.name !== action.payload.name), item.quantity = action.payload.quantity)
+                return state.map((item) => {
+                    if(action.payload.name == item.name) {
+                        return Object.assign({}, item, {quantity: action.payload.quantity})
+                    }
+                    return item
                 })
+            }
+            case 'CLEAR_SELECTED_ITEMS':
+            {
+                return []
             }
         default:
             return state
@@ -42,6 +48,13 @@ function dealFoods(state = [], action) {
                     return Object.assign(state.filter(foods => foods.name !== action.payload.name), item)
                 })
             }
+        case 'SET_DEFAULT_FOODS':
+            {
+                return state.map((item) => {
+                    item.isSelected = false
+                    return item
+                })
+            }
         default:
             return state
     }
@@ -57,6 +70,22 @@ function dealDrinks(state = [], action) {
         {
             return action.payload
         }
+        case 'UPDATE_SELECTED_DRINK':
+            {
+                state.map((item) => {
+                    if(action.payload.name == item.name)
+                    item.isSelected = action.payload.isSelected
+
+                    return Object.assign(state.filter(drinks => drinks.name !== action.payload.name), item)
+                })
+            }
+        case 'SET_DEFAULT_DRINKS':
+            {
+                return state.map((item) => {
+                    item.isSelected = false
+                    return item
+                })
+            }
         default:
             return state
     }
